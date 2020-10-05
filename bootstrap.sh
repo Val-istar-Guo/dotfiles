@@ -7,7 +7,7 @@ git pull origin master;
 function doIt() {
   rsync --exclude ".DS_Store" \
     --exclude ".osx" \
-    -avh --no-perms ./src ~;
+    -avh --no-perms ./src/ ~;
 
   source ~/.zshrc;
 }
