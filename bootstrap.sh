@@ -9,7 +9,10 @@ function doIt() {
     --exclude ".osx" \
     -avh --no-perms ./src/ ~;
 
-  source ~/.zshrc;
+  if [ -e ~/.after_bootstrap.sh ]; then
+    echo 'run after'
+    ~/.after_bootstrap.sh;
+  fi;
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
