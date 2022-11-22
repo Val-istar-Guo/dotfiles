@@ -1,3 +1,8 @@
+# Disable auto correct
+unsetopt correct_all
+unsetopt correct
+DISABLE_AUTO_TITLE="true"
+
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 
