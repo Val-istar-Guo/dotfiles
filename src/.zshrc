@@ -1,8 +1,4 @@
 # Disable auto correct
-unsetopt correct_all
-unsetopt correct
-DISABLE_AUTO_TITLE="true"
-
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 
@@ -18,7 +14,9 @@ ZSH_THEME="amuse"
 export UPDATE_ZSH_DAYS=30
 
 # Enable command auto-correction.
-ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="false"
+unsetopt correct_all
+unsetopt correct
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
