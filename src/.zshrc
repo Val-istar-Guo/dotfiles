@@ -1,53 +1,42 @@
-# Disable auto correct
-# If you come from bash you might have to change your $PATH.
+[[ -r $HOME/.profile ]] && source $HOME/.profile
+
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 
-# Path to your oh-my-zsh installation.
+# 关闭终端提示声
+set bell-style none
+
+# .oh-my-zsh安装位置
 export ZSH=~/.oh-my-zsh
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="amuse"
+# ZSH 主题
+ZSH_THEME="ys"
 
-# How often to auto-update (in days).
+# ZSH更新周期
 export UPDATE_ZSH_DAYS=30
 
-# Enable command auto-correction.
+# 禁用ZSH的命令自动修正
 ENABLE_CORRECTION="false"
 unsetopt correct_all
 unsetopt correct
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# ZSH命令行时间格式
 HIST_STAMPS="yyyy-mm-dd"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# 配置ZSH History文件位置
+export HISTFILE=~/.config/zsh/history
+export ZDOTDIR=~/.config/zsh/zdotdir
 
+
+# 加载.dotfiles/zsh下的配置文件
+for FILE in $HOME/.dotfiles/zsh/*; do
+  [ -r "${FILE}" ]&& [ -f "${FILE}" ] && source ${FILE}
+done
+unset file
+
+#==================== Oh-My-Zsh =====================
+# 加载的ZSH插件
+# 示例: plugins=(rails git textmate ruby lighthouse)
+plugins=(git docker)
+
+# 启动oh-my-zsh
 source $ZSH/oh-my-zsh.sh
-
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"
-export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{exports,aliases,functions,extra}; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file";
-done;
-unset file;
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

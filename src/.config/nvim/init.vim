@@ -1,3 +1,4 @@
+" 插件启动
 call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'asvetliakov/vim-easymotion'
@@ -12,14 +13,8 @@ autocmd VimEnter *
 
 " 公用剪切板
 set clipboard^=unnamed,unnamedplus
-if has('clipboard') || exists('g:vscode')
-    let s:clip = '/mnt/c/Windows/System32/clip.exe'
-    if executable(s:clip)
-        augroup WSLYank
-            autocmd!
-            autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
-        augroup END
-    endif
+if exists('$WSLENV')
+  autocmd TextYankPost * if v:event.operator ==# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif
 endif
 
 " 设置leader
