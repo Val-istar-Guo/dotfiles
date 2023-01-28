@@ -24,7 +24,6 @@ HIST_STAMPS="yyyy-mm-dd"
 
 # 配置ZSH History文件位置
 export HISTFILE=~/.config/zsh/history
-export ZDOTDIR=~/.config/zsh/zdotdir
 
 
 # 加载.dotfiles/zsh下的配置文件
