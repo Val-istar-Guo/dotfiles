@@ -43,3 +43,12 @@ export GPG_TTY=$(tty);
 #======================  NVM   ======================
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+#======================  PNPM  ======================
+if [[ -d "${HOME}/Library/pnpm" ]]; then
+  export PNPM_HOME="${HOME}/Library/pnpm"
+  export PATH="$PNPM_HOME:$PATH"
+fi
+
+#======================  FIG   ======================
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"

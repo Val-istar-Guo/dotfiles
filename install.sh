@@ -23,6 +23,8 @@ for FILE in "${BACKUP_FILES[@]}"; do
   if [[ -L $HOME/$FILE ]]; then
     rm $HOME/$FILE
   elif [[ -r $HOME/$FILE ]]; then
+    TARGET_DIR=$(dirname ${BAKUP_DIR}/${FILE})
+    [[ ! -d $TARGET_DIR ]] && mkdir -p $TARGET_DIR
     mv $HOME/$FILE $BAKUP_DIR/$FILE.bak-$(date +"%F-%R")
   fi
 done
@@ -30,7 +32,7 @@ done
 #===== 安装文件 =====
 for FILE in "${FILES[@]}"; do
   TARGET_DIR=$(dirname ${HOME}/${FILE})
-  [[ -d $TARGET_DIR ]] || mkdir -p $TARGET_DIR
+  [[ ! -d $TARGET_DIR ]] && mkdir -p $TARGET_DIR
   ln -s $DIR/src/$FILE ${HOME}/${FILE}
 done
 
