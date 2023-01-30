@@ -21,3 +21,7 @@ alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+
+#======================  NPM   ======================
+alias nr='npm run'
+alias ns='npm start'
