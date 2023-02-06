@@ -9,7 +9,7 @@ set bell-style none
 export ZSH=~/.oh-my-zsh
 
 # ZSH 主题
-ZSH_THEME="ys"
+ZSH_THEME="rkj-repos"
 
 # ZSH更新周期
 export UPDATE_ZSH_DAYS=30
@@ -20,7 +20,7 @@ unsetopt correct_all
 unsetopt correct
 
 # ZSH命令行时间格式
-HIST_STAMPS="yyyy-mm-dd"
+# HIST_STAMPS="yyyy-mm-dd"
 
 # 配置ZSH History文件位置
 export HISTFILE=~/.config/zsh/history
