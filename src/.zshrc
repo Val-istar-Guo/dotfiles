@@ -1,3 +1,4 @@
+[[ -r $HOME/.bashrc ]] && source $HOME/.bashrc
 [[ -r $HOME/.profile ]] && source $HOME/.profile
 
 export PATH=$HOME/bin:/usr/local/sbin:$PATH

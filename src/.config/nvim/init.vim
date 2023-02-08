@@ -13,9 +13,9 @@ autocmd VimEnter *
 
 " 公用剪切板
 set clipboard^=unnamed,unnamedplus
-if exists('$WSLENV')
-  autocmd TextYankPost * if v:event.operator ==# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif
-endif
+"  if exists('$WSLENV')
+"    autocmd TextYankPost * if v:event.operator ==# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif
+"  endif
 
 " 设置leader
 let mapleader = "\<Space>"
