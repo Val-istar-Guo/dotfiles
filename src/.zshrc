@@ -10,7 +10,7 @@ set bell-style none
 export ZSH=~/.oh-my-zsh
 
 # ZSH 主题
-ZSH_THEME="rkj-repos"
+ZSH_THEME="frisk"
 
 # ZSH更新周期
 export UPDATE_ZSH_DAYS=30
@@ -26,10 +26,9 @@ unsetopt correct
 # 配置ZSH History文件位置
 export HISTFILE=~/.config/zsh/history
 
-
 # 加载.dotfiles/zsh下的配置文件
 for FILE in $HOME/.dotfiles/zsh/*; do
-  [ -r "${FILE}" ]&& [ -f "${FILE}" ] && source ${FILE}
+  [ -r "${FILE}" ] && [ -f "${FILE}" ] && source ${FILE}
 done
 unset file
 
