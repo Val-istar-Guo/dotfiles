@@ -26,16 +26,15 @@ unsetopt correct
 # 配置ZSH History文件位置
 export HISTFILE=~/.config/zsh/history
 
+# 加载的ZSH插件
+# 示例: plugins=(rails git textmate ruby lighthouse)
+plugins=(git docker)
+
 # 加载.dotfiles/zsh下的配置文件
 for FILE in $HOME/.dotfiles/zsh/*; do
   [ -r "${FILE}" ] && [ -f "${FILE}" ] && source ${FILE}
 done
 unset file
-
-#==================== Oh-My-Zsh =====================
-# 加载的ZSH插件
-# 示例: plugins=(rails git textmate ruby lighthouse)
-plugins=(git docker)
 
 # 启动oh-my-zsh
 source $ZSH/oh-my-zsh.sh
