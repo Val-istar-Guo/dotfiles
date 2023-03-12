@@ -10,7 +10,7 @@ set bell-style none
 export ZSH=~/.oh-my-zsh
 
 # ZSH 主题
-ZSH_THEME="frisk"
+ZSH_THEME="pmcgee"
 
 # ZSH更新周期
 export UPDATE_ZSH_DAYS=30
