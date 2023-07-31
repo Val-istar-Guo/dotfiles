@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 如果安装了nvim优先使用nvim
-if command -v nvim &> /dev/null ;then
+if command -v nvim &>/dev/null; then
   alias vi='nvim'
 fi
 
@@ -23,11 +23,10 @@ alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'
 alias path='echo -e ${PATH//:/\\n}'
 
 #======================  NPM   ======================
-alias nr='corepack npm run'
-alias ns='corepack npm start'
+alias nr='npm run'
+alias ns='npm start'
+
 alias yarn="corepack yarn"
 alias yarnpkg="corepack yarnpkg"
 alias pnpm="corepack pnpm"
 alias pnpx="corepack pnpx"
-alias npm="corepack npm"
-alias npx="corepack npx"

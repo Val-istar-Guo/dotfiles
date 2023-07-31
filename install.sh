@@ -3,16 +3,16 @@ set -e
 
 #===== 初始化 =====
 if [[ "$(uname)" == "Darwin" ]]; then
-    OS="Mac"
+  OS="Mac"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    OS="Linux"
+  OS="Linux"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-    OS="MinGW"
+  OS="MinGW"
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BAKUP_DIR=$DIR/backup
-FILES=(".curlrc" ".zshrc" ".gitconfig" ".gitignore" "bin" ".ssh/config" ".config/nvim" ${ZSH_FILES[@]})
+FILES=(".curlrc" ".czrc" ".zshrc" ".gitconfig" ".gitignore" "bin" ".ssh/config" ".config/nvim" ${ZSH_FILES[@]})
 for FILE in ${DIR}/src/.dotfiles/zsh/*; do
   FILE_PATH=".dotfiles/zsh/$(basename ${FILE})"
   FILES=(${FILES[@]} ${FILE_PATH})
@@ -20,10 +20,8 @@ done
 INDIVISUAL_FILES=(".vimrc" ".vim")
 BACKUP_FILES=(${FILES[@]} ${INDIVISUAL_FILES[@]})
 
-
 echo FILES: ${FILES[@]}
 echo BACKUP_FILES: ${BACKUP_FILES[@]}
-
 
 #===== 清理文件 =====
 mkdir -p $BAKUP_DIR
