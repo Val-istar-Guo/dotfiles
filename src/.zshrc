@@ -1,4 +1,13 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 [[ -r $HOME/.profile ]] && source $HOME/.profile
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 
@@ -9,7 +18,8 @@ set bell-style none
 export ZSH=~/.oh-my-zsh
 
 # ZSH 主题
-ZSH_THEME="pmcgee"
+# ZSH_THEME="pmcgee"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # ZSH更新周期
 export UPDATE_ZSH_DAYS=30
@@ -41,7 +51,10 @@ source $ZSH/oh-my-zsh.sh
 # pnpm
 export PNPM_HOME="/home/admin/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
