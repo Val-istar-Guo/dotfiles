@@ -37,7 +37,7 @@ export HISTFILE=~/.config/zsh/history
 
 # 加载的ZSH插件
 # 示例: plugins=(rails git textmate ruby lighthouse)
-plugins=(git docker)
+plugins=(git docker kubectl)
 
 # 加载.dotfiles/zsh下的配置文件
 for FILE in $HOME/.dotfiles/zsh/*; do
