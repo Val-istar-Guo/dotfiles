@@ -39,6 +39,9 @@ export HISTFILE=~/.config/zsh/history
 # 示例: plugins=(rails git textmate ruby lighthouse)
 plugins=(git docker kubectl)
 
+# 添加自定义 Zsh 补全脚本
+fpath=(/home/$USER/.dotfiles/fpath $fpath)
+
 # 加载.dotfiles/zsh下的配置文件
 for FILE in $HOME/.dotfiles/zsh/*; do
   [ -r "${FILE}" ] && [ -f "${FILE}" ] && source ${FILE}
@@ -50,3 +53,7 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# fnm
+export PATH="/home/admin/.local/share/fnm:$PATH"
+eval "$(fnm env --use-on-cd)"

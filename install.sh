@@ -12,11 +12,17 @@ fi
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BAKUP_DIR=$DIR/backup
-FILES=(".curlrc" ".czrc" ".zshrc" ".gitconfig" ".gitignore" "bin" ".ssh/config" ".config/nvim" ".gnupg/gpg.conf" ".gnupg/gpg-agent.conf" ${ZSH_FILES[@]})
+
+FILES=(".curlrc" ".czrc" ".zshrc" ".gitconfig" ".gitignore" "bin" ".ssh/config" ".config/nvim" ".gnupg/gpg.conf" ".gnupg/gpg-agent.conf")
 for FILE in ${DIR}/src/.dotfiles/zsh/*; do
   FILE_PATH=".dotfiles/zsh/$(basename ${FILE})"
   FILES=(${FILES[@]} ${FILE_PATH})
 done
+for FILE in ${DIR}/src/.dotfiles/fpath/*; do
+  FILE_PATH=".dotfiles/fpath/$(basename ${FILE})"
+  FILES=(${FILES[@]} ${FILE_PATH})
+done
+
 INDIVISUAL_FILES=(".vimrc" ".vim")
 BACKUP_FILES=(${FILES[@]} ${INDIVISUAL_FILES[@]})
 
