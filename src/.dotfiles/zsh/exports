@@ -42,7 +42,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 #======================  PNPM  ======================
 
 uNames=$(uname -s)
-osName=$(expr substr $uNames 1 5)
+osName=${uNames:0:5}
 if [[ "$osName" == "Darwi" ]]; then
   # Mac系统
   export PNPM_HOME="${HOME}/Library/pnpm"
