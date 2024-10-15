@@ -57,3 +57,6 @@ source $ZSH/oh-my-zsh.sh
 # fnm
 export PATH="/home/admin/.local/share/fnm:$PATH"
 eval "$(fnm env --use-on-cd --version-file-strategy recursive)"
+
+# disable p10k instant prompt
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
