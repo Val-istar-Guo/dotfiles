@@ -60,3 +60,10 @@ eval "$(fnm env --use-on-cd --version-file-strategy recursive)"
 
 # disable p10k instant prompt
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+# fnm
+FNM_PATH="/home/asus/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/asus/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi

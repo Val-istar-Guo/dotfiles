@@ -68,5 +68,9 @@ if [[ "$osName" == "Darwi" ]]; then
   export PATH="$HOME/.gem/bin:$PATH"
 elif [[ "$osName" == "Linux" ]]; then
   # Linux系统
-  # export PNPM_HOME="/home/admin/.local/share/pnpm"
+  FNM_PATH="/home/$USER/.local/share/fnm"
+  if [ -d "$FNM_PATH" ]; then
+    export PATH="/home/$USER/.local/share/fnm:$PATH"
+    eval "`fnm env`"
+  fi
 fi
