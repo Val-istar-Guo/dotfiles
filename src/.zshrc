@@ -37,7 +37,7 @@ export HISTFILE=~/.config/zsh/history
 
 # 加载的ZSH插件
 # 示例: plugins=(rails git textmate ruby lighthouse)
-plugins=(git docker kubectl direnv)
+plugins=(git docker kubectl direnv poetry)
 
 # 添加自定义 Zsh 补全脚本
 fpath=(/home/$USER/.dotfiles/fpath $fpath)
