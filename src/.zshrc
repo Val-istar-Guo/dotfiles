@@ -54,16 +54,7 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# fnm
-export PATH="/home/admin/.local/share/fnm:$PATH"
-eval "$(fnm env --use-on-cd --version-file-strategy recursive)"
 
 # disable p10k instant prompt
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-# fnm
-FNM_PATH="/home/asus/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/asus/.local/share/fnm:$PATH"
-  eval "`fnm env`"
-fi

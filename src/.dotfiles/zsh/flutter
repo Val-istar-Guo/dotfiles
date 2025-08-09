@@ -1,0 +1,21 @@
+uNames=$(uname -s)
+osName=${uNames:0:5}
+
+isMacOS=$([[ "$uNames" == "Darwin" ]] && echo true || echo false)
+isLinux=$([[ "$uNames" == "Linux" ]] && echo true || echo false)
+isWSL=$([[ "$(uname -r)" == *WSL2* ]] && echo true || echo false)
+
+
+if [[ "$isMacOS" == true ]]; then
+  # Mac系统
+  export PATH="$HOME/development/flutter/bin:$PATH"
+  export PATH="$HOME/.gem/bin:$PATH"
+elif [[ "$isWSL" == true ]]; then
+  export ADB_SERVER_SOCKET=tcp:127.0.0.1:5037
+  export ANDROID_SDK_ROOT="$HOME/development/android/sdk"
+  export ANDROID_HOME=${ANDROID_SDK_ROOT}
+
+  export PATH="$PATH:$HOME/development/flutter/bin"
+  export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+  export PATH="$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
+fi

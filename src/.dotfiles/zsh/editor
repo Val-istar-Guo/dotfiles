@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+#====================== SYSTEM ======================
+# 设置默认编辑器
+if command -v vim &>/dev/null; then
+  export EDITOR=vim
+  export VISDL=vim
+fi
