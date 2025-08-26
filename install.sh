@@ -18,10 +18,6 @@ for FILE in ${DIR}/src/.dotfiles/zsh/*; do
   FILE_PATH=".dotfiles/zsh/$(basename ${FILE})"
   FILES=(${FILES[@]} ${FILE_PATH})
 done
-for FILE in ${DIR}/src/.dotfiles/fpath/*; do
-  FILE_PATH=".dotfiles/fpath/$(basename ${FILE})"
-  FILES=(${FILES[@]} ${FILE_PATH})
-done
 
 INDIVISUAL_FILES=(".vimrc" ".vim")
 BACKUP_FILES=(${FILES[@]} ${INDIVISUAL_FILES[@]})

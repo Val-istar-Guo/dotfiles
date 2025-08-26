@@ -1,0 +1,3 @@
+if command -v direnv &> /dev/null; then
+  plugins+=(direnv)
+fi
