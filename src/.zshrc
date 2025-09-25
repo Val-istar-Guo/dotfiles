@@ -39,6 +39,7 @@ unsetopt correct_all
 unsetopt correct
 
 # 加载.dotfiles/zsh下的配置文件
+# 此步骤应该放在最后，以便可以覆盖默认配置
 for FILE in $HOME/.dotfiles/zsh/*; do
   [ -r "${FILE}" ] && [ -f "${FILE}" ] && source ${FILE}
 done
