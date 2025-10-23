@@ -171,3 +171,7 @@ path = ~/.dotfiles/.gitconfig
 
 [gpg]
 program = gpg
+
+[user]
+	name = Dear Guo
+	email = guozhihao@shein.com

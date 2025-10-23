@@ -1,6 +1,6 @@
 # 在 VSCode Copilot Agent 模式下禁用 powerlevel10k
 # 否则会导致 Agent 无法读取终端输出数据
-if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-  # ZSH_THEME="robbyrussell"
-  POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
-fi
+# if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+#   ZSH_THEME="robbyrussell"
+#   POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
+# fi
