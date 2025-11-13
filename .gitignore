@@ -1,2 +1,3 @@
-backup
+/backup
+/logs
 src/.config/nvim/plugged
