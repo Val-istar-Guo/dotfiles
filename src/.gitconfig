@@ -166,12 +166,8 @@ followTags = true
 [pull]
 rebase = true
 
-[include]
-path = ~/.dotfiles/.gitconfig
-
 [gpg]
 program = gpg
 
-[user]
-	name = Dear Guo
-	email = guozhihao@shein.com
+[include]
+path = ~/.dotfiles/.gitconfig
