@@ -134,7 +134,8 @@ followTags = true
 rebase = true
 
 [gpg]
-program = ssh-keygen
+format = ssh
+program = "ssh-keygen"
 
 [include]
 path = ~/.dotfiles/.gitconfig
