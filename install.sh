@@ -94,8 +94,12 @@ for resource in "${RESOURCES[@]}"; do
 
   target_path="$HOME/$resource"
 
+  # 如果是符号链接，则删除
+  if [[ -L "$target_path" ]]; then
+    rm "$target_path"
+    log_info "已删除符号链接: $resource"
   # 如果文件存在且是真实文件（不是符号链接），则备份
-  if [[ -e "$target_path" && ! -L "$target_path" ]]; then
+  elif [[ -e "$target_path" ]]; then
     backup_path="$BACKUP_DIR/$resource"
     backup_dir="$(dirname "$backup_path")"
     mkdir -p "$backup_dir"
