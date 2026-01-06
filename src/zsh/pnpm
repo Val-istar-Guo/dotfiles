@@ -10,7 +10,7 @@ if [[ "$isMacOS" == true ]]; then
   export PNPM_HOME="${HOME}/Library/pnpm"
 elif [[ "$isLinux" == true ]]; then
   # Linux系统
-  export PNPM_HOME="/home/admin/.local/share/pnpm"
+  export PNPM_HOME="${HOME}/.local/share/pnpm"
 fi
 
 if [ -n "$PNPM_HOME" ]; then

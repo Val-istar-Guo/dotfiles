@@ -3,8 +3,7 @@
 # Prerequisites
 
 - [powerlevel10k](https://github.com/romkatv/powerlevel10k)
-- [direnv](https://github.com/direnv/direnv/tree/master)
-- [fnm](https://github.com/Schniz/fnm)
+- [mise](https://github.com/jdx/mise)
 
 ## Installation
 

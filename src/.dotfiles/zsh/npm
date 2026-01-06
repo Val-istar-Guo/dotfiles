@@ -1,8 +1,0 @@
-alias nr='npm run'
-alias ns='npm start'
-
-alias yarn="corepack yarn"
-alias yarnpkg="corepack yarnpkg"
-alias pnpm="corepack pnpm"
-alias pnpx="corepack pnpx"
-

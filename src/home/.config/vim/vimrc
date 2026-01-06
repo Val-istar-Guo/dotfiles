@@ -1,0 +1,225 @@
+" ============================================================================
+" 基础设置
+" ============================================================================
+
+" 关闭 Vi 兼容模式，使用 Vim 增强功能
+set nocompatible
+
+" 使用 UTF-8 编码，不使用 BOM
+set encoding=utf-8 nobomb
+
+" 启用文件类型检测、插件和缩进
+filetype plugin indent on
+
+" 启用语法高亮
+syntax on
+
+" ============================================================================
+" 界面显示
+" ============================================================================
+
+" 使用深色背景，配色方案与终端融合
+set background=dark
+" 不设置 colorscheme，使用终端默认配色（与终端主题完美融合）
+" 如果你的终端使用了自定义配色（如 Solarized、Nord 等），Vim 会自动继承
+
+" 显示行号
+set number
+
+" 显示相对行号（便于快速跳转）
+if exists("&relativenumber")
+  set relativenumber
+endif
+
+" 高亮当前行
+set cursorline
+
+" 始终显示状态栏
+set laststatus=2
+
+" 显示光标位置
+set ruler
+
+" 显示输入的命令
+set showcmd
+
+" 显示当前模式
+set showmode
+
+" 在窗口标题栏显示文件名
+set title
+
+" 启动时不显示介绍信息
+set shortmess=atI
+
+" 显示不可见字符
+set list
+set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
+
+" 滚动时光标距离顶部/底部保持 3 行
+set scrolloff=3
+
+" 移动光标时不自动跳到行首
+set nostartofline
+
+" ============================================================================
+" 编辑行为
+" ============================================================================
+
+" 设置 Leader 键为逗号
+let mapleader=","
+
+" 使用系统剪贴板（需要编译时支持 +clipboard）
+set clipboard=unnamed
+
+" 允许退格键删除缩进、换行符和插入模式开始前的字符
+set backspace=indent,eol,start
+
+" Tab 键宽度为 2 个空格
+set tabstop=2
+
+" 自动缩进时使用 2 个空格
+set shiftwidth=2
+
+" 使用空格代替 Tab
+set expandtab
+
+" 智能缩进
+set smartindent
+
+" 保持文件末尾不自动添加空行
+set binary
+set noeol
+
+" ============================================================================
+" 搜索设置
+" ============================================================================
+
+" 搜索时高亮显示结果
+set hlsearch
+
+" 输入搜索模式时即时高亮匹配
+set incsearch
+
+" 搜索时忽略大小写
+set ignorecase
+
+" 如果搜索模式包含大写字母，则不忽略大小写
+set smartcase
+
+" 替换时默认使用全局替换（g 标志）
+set gdefault
+
+" ============================================================================
+" 性能优化
+" ============================================================================
+
+" 针对快速终端连接优化
+set ttyfast
+
+" 减少重绘次数
+set lazyredraw
+
+" ============================================================================
+" 命令行增强
+" ============================================================================
+
+" 增强命令行补全
+set wildmenu
+
+" 命令行补全模式
+set wildmode=longest:full,full
+
+" 忽略某些文件类型
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp,*.swo,*~
+
+" ============================================================================
+" 其他设置
+" ============================================================================
+
+" 在所有模式下启用鼠标
+set mouse=a
+
+" 禁用错误提示音
+set noerrorbells
+set visualbell
+set t_vb=
+
+" 允许在插入模式下使用方向键
+set esckeys
+
+" 支持文件内的 modeline（文件特定设置）
+set modeline
+set modelines=4
+
+" 允许读取目录下的 .vimrc 文件（但禁用不安全的命令）
+set exrc
+set secure
+
+" 设置历史记录数量
+set history=1000
+
+" 设置撤销级别
+set undolevels=1000
+
+" 自动读取外部修改的文件
+set autoread
+
+" 隐藏缓冲区而不是关闭
+set hidden
+
+" ============================================================================
+" 自定义函数
+" ============================================================================
+
+" 删除行尾空白字符（使用 ,ss 调用）
+function! StripWhitespace()
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+
+" ============================================================================
+" 快捷键映射
+" ============================================================================
+
+" 删除行尾空白
+noremap <leader>ss :call StripWhitespace()<CR>
+
+" 使用 sudo 权限保存文件
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" 快速清除搜索高亮
+nnoremap <leader><space> :nohlsearch<CR>
+
+" 快速保存
+nnoremap <leader>w :w<CR>
+
+" 快速退出
+nnoremap <leader>q :q<CR>
+
+" 窗口切换快捷键
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" ============================================================================
+" 文件类型特定设置
+" ============================================================================
+
+if has("autocmd")
+  " JSON 文件使用 JavaScript 语法高亮
+  autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+
+  " Markdown 文件设置
+  autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+
+  " 自动跳转到上次编辑位置
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+endif
