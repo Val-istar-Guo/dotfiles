@@ -3,155 +3,166 @@ set -euo pipefail
 
 #======================================================================
 # Dotfiles 安装脚本
+# 用途：首次安装 dotfiles 配置
+# 支持两种运行方式：
+#   1. 通过 curl 直接执行（会自动克隆仓库）
+#   2. 在已克隆的仓库目录中执行（跳过克隆步骤）
+#
 #======================================================================
 
-#===== 初始化 =====
-# 获取脚本目录
+# 仓库配置
+readonly DOTFILES_REPO="https://github.com/val-istar-guo/dotfiles.git"
+readonly DEFAULT_INSTALL_DIR="${HOME}/dotfiles"
+
+# 依赖配置
+readonly REQUIRED_DEPENDENCIES=("git" "p10k")  # 必须的命令行工具
+readonly OPTIONAL_DEPENDENCIES=("mise")        # 可选的命令行工具
+
+# 获取脚本所在目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# 加载公共变量和辅助函数
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/utils.sh"
+# 日志函数（与 lib/utils.sh 保持一致）
+log_info() {
+  echo "[INFO] $*"
+}
 
-# 安装脚本配置
-readonly BACKUP_DIR="$DOTFILES_DIR/backup/$(date +"%Y-%m-%d_%H-%M-%S")"
-readonly CLEANUP_SUBDIRS=(".config" ".ssh")
+log_success() {
+  echo "[✓] $*"
+}
 
-#===== 收集需要安装的文件 =====
-log_step "扫描配置文件"
+log_error() {
+  echo "[✗] $*"
+}
 
-if [[ ! -d "$SRC_HOME_DIR" ]]; then
-  log_warning "源目录不存在: $SRC_HOME_DIR"
-  exit 1
-fi
+log_step() {
+  echo
+  echo "==> $*"
+}
 
-# 遍历 src/home 目录，收集所有文件和符号链接
-RESOURCES=()
-while IFS= read -r -d '' file; do
-  relative_path="${file#$SRC_HOME_DIR/}"
-  RESOURCES+=("$relative_path")
-done < <(find "$SRC_HOME_DIR" -mindepth 1 \( -type f -o -type l \) -print0 | sort -z)
-
-if [[ ${#RESOURCES[@]} -eq 0 ]]; then
-  log_warning "未找到任何配置文件"
-  exit 1
-fi
-
-log_info "准备安装 ${#RESOURCES[@]} 个配置文件"
-for resource in "${RESOURCES[@]}"; do
-  echo "  • $resource"
-done
-
-#===== 卸载旧配置 =====
-log_step "卸载旧配置"
-
-removed_count=0
-
-# 卸载 HOME 目录直接下的符号链接（不递归）
-while IFS= read -r -d '' link; do
-  link_target="$(readlink "$link")"
-  if [[ "$link_target" == "$DOTFILES_DIR"* ]]; then
-    rm "$link"
-    relative_link="${link#$HOME/}"
-    log_info "移除: $relative_link"
-    removed_count=$((removed_count + 1))
-  fi
-done < <(find "$HOME" -maxdepth 1 -type l -print0 2>/dev/null; exit 0)
-
-# 卸载特定子目录（限制深度为3层）
-for subdir in "${CLEANUP_SUBDIRS[@]}"; do
-  dir_path="$HOME/$subdir"
-  if [[ ! -d "$dir_path" ]]; then
-    continue
+# 检查当前是否在 dotfiles 仓库中运行
+_is_running_in_repo() {
+  # 检查当前目录是否是 git 仓库
+  if [[ ! -d "$SCRIPT_DIR/.git" ]]; then
+    return 1
   fi
 
-  while IFS= read -r -d '' link; do
-    link_target="$(readlink "$link")"
-    if [[ "$link_target" == "$DOTFILES_DIR"* ]]; then
-      rm "$link"
-      relative_link="${link#$HOME/}"
-      log_info "移除: $relative_link"
-      removed_count=$((removed_count + 1))
+  # 检查是否包含必要的文件
+  if [[ -f "$SCRIPT_DIR/bootstrap.sh" ]] && [[ -d "$SCRIPT_DIR/src" ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
+# 克隆仓库或使用当前仓库
+# 返回：仓库目录路径（通过 echo）
+setup_repo() {
+  # 如果在仓库中运行，直接使用当前目录
+  if _is_running_in_repo; then
+    log_step "检测到在仓库中运行"
+    log_info "使用当前目录: $SCRIPT_DIR"
+    log_success "仓库已就绪"
+
+    # 返回当前目录路径
+    echo "$SCRIPT_DIR"
+    return 0
+  fi
+
+  # 通过 curl 执行，需要克隆仓库到默认位置
+  local target_dir="$DEFAULT_INSTALL_DIR"
+
+  log_step "克隆 dotfiles 仓库"
+  log_info "目标位置: $target_dir"
+
+  if [[ -d "$target_dir" ]]; then
+    log_error "目录已存在: $target_dir"
+    log_info "如需更新配置，请使用以下命令："
+    echo "  dotfiles upgrade"
+    echo "或者："
+    echo "  cd $target_dir && ./upgrade.sh"
+    exit 1
+  fi
+
+  git clone "$DOTFILES_REPO" "$target_dir"
+  log_success "仓库克隆完成"
+
+  # 返回克隆的目录路径
+  echo "$target_dir"
+}
+
+# 检查前置依赖
+check_dependencies() {
+  log_step "检查前置依赖"
+
+  local missing_deps=()
+
+  # 检查必须依赖
+  for cmd in "${REQUIRED_DEPENDENCIES[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+      missing_deps+=("$cmd")
     fi
-  done < <(find "$dir_path" -maxdepth 3 -type l -print0 2>/dev/null; exit 0)
-done
+  done
 
-if [[ $removed_count -gt 0 ]]; then
-  log_success "卸载完成，移除 $removed_count 个旧配置"
-else
-  log_info "无需卸载"
-fi
-
-#===== 备份现有配置 =====
-log_step "备份现有配置"
-
-backup_count=0
-for resource in "${RESOURCES[@]}"; do
-  # 跳过 .gitkeep 文件的备份
-  if [[ "$(basename "$resource")" == ".gitkeep" ]]; then
-    continue
+  # 如果缺少必须依赖，退出
+  if [[ ${#missing_deps[@]} -gt 0 ]]; then
+    log_error "缺少以下必须依赖: ${missing_deps[*]}"
+    log_info "请先安装缺失的依赖后再运行安装脚本"
+    exit 1
   fi
 
-  target_path="$HOME/$resource"
+  # 检查可选依赖
+  for cmd in "${OPTIONAL_DEPENDENCIES[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+      log_warning "$cmd 未安装（可选依赖）"
+    fi
+  done
 
-  # 如果是符号链接，则删除
-  if [[ -L "$target_path" ]]; then
-    rm "$target_path"
-    log_info "已删除符号链接: $resource"
-  # 如果文件存在且是真实文件（不是符号链接），则备份
-  elif [[ -e "$target_path" ]]; then
-    backup_path="$BACKUP_DIR/$resource"
-    backup_dir="$(dirname "$backup_path")"
-    mkdir -p "$backup_dir"
-    mv "$target_path" "$backup_path"
-    log_success "已备份: $resource"
-    backup_count=$((backup_count + 1))
+  log_success "所有必须依赖已满足"
+}
+
+# 运行 bootstrap
+run_bootstrap() {
+  local dotfiles_dir="$1"
+
+  log_step "运行配置安装脚本"
+
+  cd "$dotfiles_dir"
+  ./bootstrap.sh
+}
+
+# 加载配置
+reload_shell() {
+  log_step "加载新配置"
+
+  if [[ -f "${HOME}/.zshrc" ]]; then
+    log_success "配置安装完成！"
+    echo
+    log_info "请运行以下命令以加载新配置："
+    echo "  source ~/.zshrc"
+    echo
+    log_info "或重启终端会话"
+  else
+    log_error "未找到 ~/.zshrc 文件"
+    exit 1
   fi
-done
+}
 
-if [[ $backup_count -gt 0 ]]; then
-  log_success "备份完成，共 $backup_count 个文件 → $BACKUP_DIR"
-else
-  log_info "无需备份任何文件"
-fi
+# 主流程
+main() {
+  echo "========================================"
+  echo "  Val.istar.Guo's Dotfiles - 安装程序"
+  echo "========================================"
 
-#===== 创建符号链接 =====
-log_step "安装配置文件"
+  check_dependencies
 
-install_count=0
-for resource in "${RESOURCES[@]}"; do
-  source_path="$SRC_HOME_DIR/$resource"
-  target_path="$HOME/$resource"
-  target_dir="$(dirname "$target_path")"
+  # 获取仓库目录路径
+  local dotfiles_dir
+  dotfiles_dir="$(setup_repo)"
 
-  # 对 .gitkeep 文件特殊处理：只创建目录
-  if [[ "$(basename "$resource")" == ".gitkeep" ]]; then
-    mkdir -p "$target_dir"
-    continue
-  fi
+  run_bootstrap "$dotfiles_dir"
+  reload_shell
 
-  # 确保目标目录存在
-  mkdir -p "$target_dir"
+  log_success "🎉 安装完成！"
+}
 
-  # 创建符号链接
-  ln -s "$source_path" "$target_path"
-  log_success "已安装: $resource"
-  install_count=$((install_count + 1))
-done
-
-log_success "安装完成，共 $install_count 个文件"
-
-#===== 注册 Crontab =====
-log_step "注册 Crontab 任务"
-
-if [[ -f "$CRONTAB_SCRIPT_PATH" ]]; then
-  source "$CRONTAB_SCRIPT_PATH"
-  log_success "Crontab 任务已注册"
-else
-  log_warning "未找到 crontab.sh，跳过任务注册"
-fi
-
-#===== 完成 =====
-echo
-log_success "🎉 所有配置已安装完成！"
-echo
+main "$@"

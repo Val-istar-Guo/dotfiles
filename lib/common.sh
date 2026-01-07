@@ -18,8 +18,7 @@ readonly SRC_HOME_DIR="$SRC_DIR/home"
 readonly LOG_DIR="$DOTFILES_DIR/logs"
 
 # 核心脚本路径
-readonly INSTALL_SCRIPT_PATH="$DOTFILES_DIR/install.sh"
-readonly CRONTAB_SCRIPT_PATH="$DOTFILES_DIR/crontab.sh"
+readonly BOOTSTRAP_SCRIPT_PATH="$DOTFILES_DIR/bootstrap.sh"
 
 # 确保必要的目录存在
 mkdir -p "$LOG_DIR"

@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#======================================================================
+# Dotfiles CLI 工具
+# 用途：提供便捷的 dotfiles 管理命令
+#======================================================================
+
+readonly DOTFILES_DIR="${HOME}/dotfiles"
+
+# 检查 dotfiles 是否已安装
+check_installation() {
+  if [[ ! -d "$DOTFILES_DIR" ]]; then
+    echo "[✗] Dotfiles 未安装: $DOTFILES_DIR"
+    echo "[INFO] 请先运行安装脚本"
+    exit 1
+  fi
+
+  if [[ ! -d "$DOTFILES_DIR/.git" ]]; then
+    echo "[✗] Dotfiles 目录不是 git 仓库"
+    exit 1
+  fi
+}
+
+# 更新配置
+cmd_upgrade() {
+  check_installation
+
+  if [[ -f "$DOTFILES_DIR/upgrade.sh" ]]; then
+    exec "$DOTFILES_DIR/upgrade.sh"
+  else
+    echo "[✗] 未找到更新脚本: $DOTFILES_DIR/upgrade.sh"
+    exit 1
+  fi
+}
+
+# 重新安装
+cmd_install() {
+  check_installation
+
+  if [[ -f "$DOTFILES_DIR/bootstrap.sh" ]]; then
+    cd "$DOTFILES_DIR"
+    exec "./bootstrap.sh"
+  else
+    echo "[✗] 未找到安装脚本: $DOTFILES_DIR/bootstrap.sh"
+    exit 1
+  fi
+}
+
+# 查看备份
+cmd_backup() {
+  check_installation
+
+  local backup_dir="$DOTFILES_DIR/backup"
+  if [[ -d "$backup_dir" ]]; then
+    echo "==> 备份目录: $backup_dir"
+    ls -lht "$backup_dir" | head -10
+  else
+    echo "[INFO] 备份目录为空"
+  fi
+}
+
+# 查看日志
+cmd_logs() {
+  check_installation
+
+  local log_dir="$DOTFILES_DIR/logs"
+  if [[ -d "$log_dir" ]]; then
+    echo "==> 日志目录: $log_dir"
+    ls -lht "$log_dir"
+  else
+    echo "[INFO] 日志目录为空"
+  fi
+}
+
+# 主函数
+main() {
+  local command="${1:-upgrade}"
+
+  case "$command" in
+    upgrade)
+      cmd_upgrade
+      ;;
+    install)
+      cmd_install
+      ;;
+    backup)
+      cmd_backup
+      ;;
+    logs)
+      cmd_logs
+      ;;
+    *)
+      echo "[✗] 未知命令: $command"
+      echo
+      echo "用法: dotfiles <command>"
+      echo
+      echo "命令:"
+      echo "  upgrade    更新配置（默认）"
+      echo "  install    重新安装配置"
+      echo "  backup     查看备份目录"
+      echo "  logs       查看日志目录"
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
