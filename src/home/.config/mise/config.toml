@@ -3,6 +3,7 @@ node = "24"
 "npm:corepack" = "latest"
 "npm:czg" = "latest"
 helm = "latest"
+usage="latest"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本

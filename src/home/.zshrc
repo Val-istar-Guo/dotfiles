@@ -53,7 +53,7 @@ fi
 
 DOTFILES_ZSH_CONFIG_HOME="$DOTFILES_ROOT/src/zsh"
 ZSH_CONFIG_HOME="$HOME/.config/zsh/conf.d"
-ZSH_COMPLETIONS_HOME="$HOME/.conf/zsh/completions"
+ZSH_COMPLETIONS_HOME="$HOME/.config/zsh/completions"
 
 fpath=($ZSH_COMPLETIONS_HOME $fpath)
 
