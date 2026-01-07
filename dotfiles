@@ -26,6 +26,16 @@ cmd_upgrade() {
   fi
 }
 
+# 检查更新（离线）
+cmd_check_update() {
+  if [[ -f "$DOTFILES_DIR/check-update.sh" ]]; then
+    exec "$DOTFILES_DIR/check-update.sh" "$@"
+  else
+    echo "[✗] 未找到检查更新脚本: $DOTFILES_DIR/check-update.sh"
+    exit 1
+  fi
+}
+
 # 重新安装
 cmd_install() {
   if [[ -f "$DOTFILES_DIR/bootstrap.sh" ]]; then
@@ -42,9 +52,10 @@ cmd_help() {
   echo "用法: dotfiles <command>"
   echo
   echo "命令:"
-  echo "  upgrade    更新配置"
-  echo "  install    重新安装配置"
-  echo "  help       显示帮助信息"
+  echo "  check-update  检查是否有可用更新（离线）"
+  echo "  upgrade       更新配置"
+  echo "  install       重新安装配置"
+  echo "  help          显示帮助信息"
 }
 
 # 主函数
@@ -57,7 +68,13 @@ main() {
     exit 0
   fi
 
+  # 移除第一个参数（命令本身），剩余的作为子命令参数
+  shift
+
   case "$command" in
+    check-update)
+      cmd_check_update "$@"
+      ;;
     upgrade)
       cmd_upgrade
       ;;
