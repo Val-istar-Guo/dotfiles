@@ -5,6 +5,7 @@ node = "24"
 helm = "latest"
 usage="latest"
 openbao="latest"
+claude-code="latest"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本
