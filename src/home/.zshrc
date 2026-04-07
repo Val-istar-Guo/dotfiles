@@ -61,7 +61,7 @@ fpath=($ZSH_COMPLETIONS_HOME $fpath)
 # 使用 (N) glob 限定符，当没有匹配文件时返回空列表，不会报错
 for folder in "$DOTFILES_ZSH_CONFIG_HOME" "$ZSH_CONFIG_HOME"; do
   if [ -d "$folder" ]; then
-    for file in "$folder"/*.init(N); do
+    for file in "$folder"/*.init.zsh(N); do
       [ -r "$file" ] && [ -f "$file" ] && source "$file"
     done
   fi
@@ -73,9 +73,8 @@ source $ZSH/oh-my-zsh.sh
 # 使用 (N) glob 限定符，当没有匹配文件时返回空列表，不会报错
 for folder in "$DOTFILES_ZSH_CONFIG_HOME" "$ZSH_CONFIG_HOME"; do
   if [ -d "$folder" ]; then
-    # 加载所有非 .init 结尾的文件
-    for file in "$folder"/*(N); do
-      [[ "$file" == *.init ]] && continue
+    for file in "$folder"/*.zsh(N); do
+      [[ "$file" == *.init.zsh ]] && continue
       [ -r "$file" ] && [ -f "$file" ] && source "$file"
     done
   fi
