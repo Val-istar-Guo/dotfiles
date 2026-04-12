@@ -9,6 +9,7 @@ claude-code="latest"
 "npm:ctx7" = "latest"
 "npm:dev-browser" = "latest"
 poetry = "latest"
+kubectl = "latest"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本
