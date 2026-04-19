@@ -10,6 +10,8 @@ claude-code="latest"
 "npm:dev-browser" = "latest"
 poetry = "latest"
 kubectl = "latest"
+tmux = "latest"
+"pipx:tmuxp" = "latest"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本
