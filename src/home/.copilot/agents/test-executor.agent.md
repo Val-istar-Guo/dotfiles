@@ -3,7 +3,7 @@ description: 测试执行者 — 探索项目真实的 lint / test / build / sta
 name: Test Executor
 model: Claude Haiku 4.5 (copilot)
 argument-hint: 描述本次变更范围（涉及的文件 / 模块 / 需求）。留空则自动从工作区差异推导。
-user-invocable: true
+user-invocable: false
 tools:
   [
     vscode/runCommand,

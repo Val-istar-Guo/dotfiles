@@ -3,7 +3,7 @@ description: Strictly implement code changes according to plan, add no extra ide
 name: Strict Implementer
 model: Claude Sonnet 4.6
 argument-hint: Provide the solution document path or detailed implementation checklist (must include file paths and specific changes)
-user-invocable: true
+user-invocable: false
 tools:
   [
     vscode/runCommand,
