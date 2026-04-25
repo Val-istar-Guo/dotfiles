@@ -6,12 +6,13 @@ argument-hint: Provide the solution document path or detailed implementation che
 user-invocable: false
 tools:
   [
+    vscode/memory,
     vscode/runCommand,
+    vscode/toolSearch,
     execute/runInTerminal,
     read,
     edit,
     search,
-    "io.github.upstash/context7/*",
     todo,
   ]
 ---

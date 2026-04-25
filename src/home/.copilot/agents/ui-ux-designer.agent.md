@@ -10,12 +10,9 @@ tools:
     vscode/resolveMemoryFileUri,
     vscode/askQuestions,
     read,
-    agent,
-    browser,
     search,
     web,
-    "io.github.chromedevtools/chrome-devtools-mcp/*",
-    "io.github.upstash/context7/*",
+    browser,
     vscode.mermaid-chat-features/renderMermaidDiagram,
   ]
 ---
