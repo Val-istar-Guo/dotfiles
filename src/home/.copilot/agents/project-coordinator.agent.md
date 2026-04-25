@@ -10,7 +10,7 @@ tools:
   [
     vscode/memory,
     vscode/resolveMemoryFileUri,
-    execute/executionSubagent,
+    vscode/toolSearch,
     execute/runInTerminal,
     read,
     agent,
@@ -54,12 +54,14 @@ tools:
      - 项目根目录下的 `README.md`、`CLAUDE.md`、`AGENTS.md`、`.cursorrules` 等指示文件
      - 这些文件中引用到的与构建流程、模块依赖相关的文档
 
-     2.2. **识别 workspace / 模块结构**：
+       2.2. **识别 workspace / 模块结构**：
+
      - 读取 `package.json`、`pnpm-workspace.yaml`、`turbo.json`、`Makefile`、
        `lerna.json`、`nx.json` 等任务编排配置（以实际存在的为准）
      - 确定项目是 monorepo 还是单仓库，有哪些 workspace / 模块
 
-     2.3. **识别 batch 间衔接动作**：
+       2.3. **识别 batch 间衔接动作**：
+
      - 是否存在代码生成步骤（codegen / graphql-codegen / openapi-generator / protoc 等）
      - 是否存在构建依赖链（某模块的产物是另一模块的输入）
      - 是否存在数据库迁移、schema 同步等必须在特定时机执行的动作
@@ -80,6 +82,7 @@ tools:
 - **S1. 读取并拆分方案**
   - 完整阅读 Solution Architect 提供的方案
   - 结合 S0 勘察到的模块依赖关系，按依赖关系切分为若干 batch（批次）
+  - **衍生变更归属**：方案可能包含"衍生变更摘要"表格。将每条衍生变更附加到触发它的架构性变更所在的 batch（例如：新增 `BreedService` 在 Batch A → 其 Module 注册等衍生变更也归入 Batch A）
   - 用 `#tool:todo` 建立「批次 + 验证 + 修复循环」的待办清单
   - 若方案有歧义或缺失关键信息 → goto **S7**
   - 否则 → goto **S2**
@@ -170,13 +173,22 @@ agent({
   description: "实施 Batch A",
   prompt: `请严格按照方案文档 <path> 实施以下改动。
 
-范围（禁止改动此列表之外的任何内容）：
+架构性变更范围（禁止改动此列表之外的任何内容）：
 - <文件 1>：<具体改动>
 - <文件 2>：<具体改动>
 ...
 
+衍生变更摘要（参照 codebase 现有模式完成）：
+| 触发源 | 衍生操作 | 目标文件 |
+|---|---|---|
+| ... | ... | ... |
+参照模式：<路径>
+（若本 batch 无衍生变更则省略此区域）
+
 约束：
-- 严格按方案字面执行，禁止添加功能、重构或「顺手优化」。
+- 架构性变更严格按方案字面执行。
+- 衍生变更参照指定的参照模式文件，在目标文件的对应位置追加条目。
+- 禁止添加功能、重构或「顺手优化」。
 - 若方案存在歧义或被阻塞，立刻停止并回报，禁止自行猜测。`,
 });
 ```

@@ -208,6 +208,8 @@ tools:
 
 ### 5. 文件级变更清单 （核心交付物）
 
+本节只列出**架构性变更**——体现设计决策的文件变更（Entity 字段/关系、Service 业务逻辑、Controller 路由处理、DTO 定义、Guard/Interceptor/Pipe 的设计与应用、自定义 Provider 配方等）。框架规约的机械性连带操作（Module 注册、构造函数 DI 参数、barrel re-export、标准 import 补充等）归入第 5.1 节"衍生变更摘要"。
+
 按文件分组，每个文件一个小节。
 
 #### 代码片段格式规范（关键：控制输出体积）
@@ -263,6 +265,39 @@ breed?: string;
 - **关联影响**：与本方案中其他文件的依赖关系
 - 文件之间用 `---` 分隔
 
+### 5.1 衍生变更摘要
+
+本节列出因上述架构性变更而**框架强制要求**的连带操作。这些变更满足三个条件：(1) 可从架构性变更中 100% 机械推导，无设计选择空间；(2) 不执行则代码无法编译/运行；(3) 不携带业务语义。实施者参照 codebase 现有同类模块的模式完成。
+
+格式如下：
+
+```markdown
+| 触发源 | 衍生操作 | 目标文件 |
+|---|---|---|
+| 新增 `XxxService` | providers 注册 | `xxx.module.ts` |
+| 新增 `XxxService` | 构造函数 DI 注入到 `YyyService` | `yyy.service.ts` |
+| 新增 `XxxEntity` | `MikroOrmModule.forFeature` 注册 | `xxx.module.ts` |
+| 新增 `xxx.service.ts` | barrel re-export | `xxx/index.ts` |
+| `XxxService` 使用 `ConfigModule` | imports 追加 | `xxx.module.ts` |
+
+> **参照模式**：`<现有同类模块的 module 文件路径>`
+```
+
+衍生变更的范围**仅限**以下操作类型：
+
+- Module `providers` / `controllers` / `imports` / `exports` 数组追加条目
+- 构造函数 DI 注入参数追加
+- barrel `index.ts` re-export
+- `MikroOrmModule.forFeature([])` 注册新 Entity
+- 上述操作引发的 import 语句补充
+
+**不属于**衍生变更（必须作为架构性变更列入第 5 节）：
+
+- Guard/Interceptor/Pipe 的注册方式（全局 vs 模块级 vs 路由级 = 设计决策）
+- Middleware 的路由绑定（apply/exclude 哪些路由 = 设计决策）
+- forwardRef 处理循环依赖（依赖方向 = 设计决策）
+- 自定义 Provider 配方（useFactory/useClass/useValue = 设计决策）
+
 ### 6. 风险与遗留
 
 - 已识别但本次不处理的技术债（标注原因）
@@ -279,6 +314,8 @@ breed?: string;
 - [禁止] **绝不直接对接 `Strict Implementer` 等实施 agent**，方案统一交回 `Solution Architect`
 - [禁止] **绝不编辑由 codegen / CLI 自动生成的目录**（具体目录见项目规约）；这些目录中的文件只能标记为由对应工具生成
 - [禁止] **绝不主动设计或编写数据库迁移脚本**：除非用户明确要求，方案中不应包含迁移文件条目；实体 schema 变更只描述实体本身，迁移由后续流程自行决定何时生成
+- [禁止] **绝不把存在选择空间的变更归入衍生变更摘要**（Guard/Interceptor 注册方式、forwardRef 决策、自定义 Provider 配方等必须作为架构性变更列入文件级变更清单，判定标准：如果实施者无法仅凭"新增了 X"100% 确定该操作的具体内容，它就不是衍生变更）
+- [必须] **衍生变更摘要必须完整**，覆盖所有架构性变更引发的 Module 注册、DI 注入、barrel export
 - [必须] 所有方案文本（含表格内描述）使用**中文**，技术术语保留原文
 - [必须] 严格遵循项目 `.claude/rules/` 下的编码规范与模块结构规约
 - [必须] 涉及认证 / 授权的方案必须显式映射到项目认证体系规约中的概念，并对照 OAuth2 / OIDC 标准
