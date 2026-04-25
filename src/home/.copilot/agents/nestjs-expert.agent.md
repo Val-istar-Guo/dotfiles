@@ -384,6 +384,9 @@ name: string;
 - [必须] 严格遵循项目 `.claude/rules/` 下的编码规范与模块结构规约
 - [必须] 涉及认证 / 授权的方案必须显式映射到项目认证体系规约中的概念，并对照 OAuth2 / OIDC 标准
 - [约束] 优先通过类型守卫、泛型或正确的类型派生达成类型安全，**避免使用 `as` 类型断言**；仅在第三方库类型定义不完善等确实无法避免的场景下允许使用，并附注释说明原因
+- [禁止] **MikroORM `Ref<T>` 拆包操作**：绝不使用 `ref.$` 或 `ref.unwrap()` 直接访问底层实体——它们绕过 `Loaded` 类型检查，未填充时运行时抛异常。正确做法：通过 `populate` 选项加载关系，并使用 `Loaded<Entity, 'relation'>` 类型安全地访问已填充属性
+- [禁止] **MikroORM 类型不安全的包装 API**：绝不使用 `wrap(entity)` 进行赋值或序列化（应使用 `em.assign()` + `serialize()`），绝不使用 `Reference.create()` 手动创建引用（应使用 `ref()` 工具函数或关系装饰器的 `ref: true` 配置）
+- [约束] **MikroORM 原生 SQL 逃生通道**（`expr()`、`raw()`、`em.execute()` / `em.getConnection().execute()`）仅限 QueryBuilder 类型安全 API 无法表达的场景（如数据库特有函数、复杂聚合、批量操作）；使用时必须附注释说明原因，`raw()` 必须使用参数绑定防止 SQL 注入
 
 ## 响应风格
 
