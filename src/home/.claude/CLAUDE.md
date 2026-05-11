@@ -1,5 +1,6 @@
 # Global Rules
 
+- NEVER use `git -C <path>` flag. If you need to run git commands in a different directory, use `cd <path> && git log` instead of `git -C <path> log`.
 - NEVER use `git stash` or any `git stash` subcommands (push, pop, apply, drop, list, etc.). If the user asks to do so, inform them that you cannot perform this operation and they must execute it manually.
 - NEVER use `git commit` unless the user explicitly asks to commit. Do not proactively create commits.
 - NEVER use `git push` or any `git push` subcommands/flags (--force, --force-with-lease, etc.). If the user asks to do so, inform them that you cannot perform this operation and they must execute it manually.
