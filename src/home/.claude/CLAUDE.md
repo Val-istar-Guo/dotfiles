@@ -8,3 +8,4 @@
 - When optimizing frontend interfaces, use `dev-browser` to preview changes. If the browser connection fails, run the `chrome-debug` command first, then retry connecting for debugging. Iterate on code improvements based on visual feedback from the browser preview.
 - When starting a local project (dev server, preview server, etc.), first check if the target port is already in use (e.g., `lsof -i :<port>`). If the port is occupied, switch to an alternative available port. After completing the related task, proactively stop/kill the process to release the port.
 - In TypeScript code, avoid using `as` type assertions unless absolutely necessary. Prefer type narrowing, type guards, or generics to ensure type safety.
+- When needing to fetch web page content, prefer using `curl` via Bash instead of WebFetch tool, as WebFetch may be unreliable in certain network environments. Use `curl -sL <url>` to retrieve content directly from the local machine.
