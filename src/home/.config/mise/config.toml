@@ -12,6 +12,7 @@ poetry = "latest"
 kubectl = "latest"
 tmux = "latest"
 "pipx:tmuxp" = "latest"
+gh = "latest"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本
