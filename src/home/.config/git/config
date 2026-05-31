@@ -65,6 +65,10 @@ untrackedCache = true
 
 ignorecase = false
 
+# 避免 WSL2 中因为电脑关闭导致的频繁的 empty object 错误
+fsync = object
+fsyncMethod = fsync
+
 [color]
 
 # Use colors in Git commands that are capable of colored output when
