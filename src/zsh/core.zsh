@@ -6,3 +6,7 @@ if command -v vim &>/dev/null; then
   export EDITOR=vim
   export VISDL=vim
 fi
+
+killport() {
+  lsof -ti ":$1" | xargs kill ${2:--9}
+}
