@@ -8,5 +8,16 @@ if command -v vim &>/dev/null; then
 fi
 
 killport() {
-  lsof -ti ":$1" | xargs kill ${2:--9}
+  local signal="-9"
+  local ports=("$@")
+
+  # 如果最后一个参数以 - 开头，将其视为信号
+  if [[ "${ports[-1]}" == -* ]]; then
+    signal="${ports[-1]}"
+    ports=(${ports[1,-2]})
+  fi
+
+  for port in "${ports[@]}"; do
+    lsof -ti ":$port" | xargs kill "$signal"
+  done
 }
