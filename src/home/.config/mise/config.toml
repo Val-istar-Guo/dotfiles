@@ -13,6 +13,7 @@ tmux = "latest"
 gh = "latest"
 ripgrep = "latest"
 "npm:@playwright/mcp" = "latest"
+postgres = "17"
 
 [settings]
 # 自动检测 .node-version 文件来设置 Node.js 版本
