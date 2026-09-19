@@ -47,6 +47,38 @@ patch:
       Shift_R: noop
       Control_L: noop
       Control_R: noop
+
+  # 翻页键：macOS 习惯的 [ ]（禁用以词定字以释放 [ ]）
+  key_binder:
+    select_first_character: noop
+    select_last_character: noop
+    bindings:
+      - { when: composing, accept: Shift+Tab, send: Shift+Left }
+      - { when: composing, accept: Tab, send: Shift+Right }
+      - { when: composing, accept: Alt+Left, send: Shift+Left }
+      - { when: composing, accept: Alt+Right, send: Shift+Right }
+      - { when: has_menu, accept: bracketleft, send: Page_Up }
+      - { when: has_menu, accept: bracketright, send: Page_Down }
+      - { when: always, toggle: ascii_punct, accept: Control+Shift+3 }
+      - { when: always, toggle: ascii_punct, accept: Control+Shift+numbersign }
+      - { when: always, toggle: traditionalization, accept: Control+Shift+4 }
+      - { when: always, toggle: traditionalization, accept: Control+Shift+dollar }
+      - { accept: KP_0, send: 0, when: composing }
+      - { accept: KP_1, send: 1, when: composing }
+      - { accept: KP_2, send: 2, when: composing }
+      - { accept: KP_3, send: 3, when: composing }
+      - { accept: KP_4, send: 4, when: composing }
+      - { accept: KP_5, send: 5, when: composing }
+      - { accept: KP_6, send: 6, when: composing }
+      - { accept: KP_7, send: 7, when: composing }
+      - { accept: KP_8, send: 8, when: composing }
+      - { accept: KP_9, send: 9, when: composing }
+      - { accept: KP_Decimal, send: period, when: composing }
+      - { accept: KP_Multiply, send: asterisk, when: composing }
+      - { accept: KP_Add, send: plus, when: composing }
+      - { accept: KP_Subtract, send: minus, when: composing }
+      - { accept: KP_Divide, send: slash, when: composing }
+      - { accept: KP_Enter, send: Return, when: composing }
 EOF
 }
 
@@ -112,11 +144,20 @@ patch:
       comment_text_color: '0xDEDDDD'
 
   app_options:
-    # 以下应用默认进入英文(ASCII)模式（仅本机已安装的终端）
+    # 以下应用默认进入英文(ASCII)模式（终端 + 数据库 + K8s）
     # 增删方法：`osascript -e 'id of app "应用名"'` 查看 bundle id
+    # 终端
     com.googlecode.iterm2:       # iTerm2
       ascii_mode: true
     com.apple.Terminal:          # macOS 终端
+      ascii_mode: true
+    # 数据库客户端
+    org.jkiss.dbeaver.core.product:  # DBeaver
+      ascii_mode: true
+    org.pgadmin.pgadmin4:            # pgAdmin 4
+      ascii_mode: true
+    # K8s / DevOps
+    com.electron.kontena-lens:       # Lens
       ascii_mode: true
 EOF
 }
